@@ -15,7 +15,7 @@ VERSION_PARAM=$1
 
 function change_version() {
   NEW_VERSION=$(npm version "${VERSION_PARAM}")
-  echo "::set-env tagName=${NEW_VERSION}"
+  echo "::set-output name=tagName::${NEW_VERSION}"
 }
 
 change_version
