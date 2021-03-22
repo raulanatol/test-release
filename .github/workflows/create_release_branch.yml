@@ -35,4 +35,5 @@ jobs:
         uses: raulanatol/github-actions-releaser@main
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
           TAG_NAME: ${{ steps.FinishRelease.outputs.tagName }}
