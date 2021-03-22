@@ -1,0 +1,38 @@
+name: Create release
+on:
+  workflow_dispatch:
+    inputs:
+      version_update:
+        description: 'Name of version update (ie patch) patch|minor|major'
+        default: 'patch'
+        required: true
+jobs:
+  create_release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Initialize mandatory git config
+        run: |
+          git config --local user.name "Test bot"
+          git config --local user.email noreply@test.com
+      - uses: actions/cache@v2
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
+      - name: Install dependencies
+        run: make init
+      - name: Finish release
+        id: FinishRelease
+        run: ./.scripts/finish-release.sh "${{ github.event.inputs.version_update }}"
+        env:
+          NODE_AUTH_TOKEN: ${{secrets.GITHUB_TOKEN}}
+      - name: Test output
+        run: echo ${{ steps.FinishRelease.outputs.tagName }}
+      - name: Generate release notes
+        id: actions_releaser
+        uses: raulanatol/github-actions-releaser@v1.3.0
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          TAG_NAME: ${{ steps.FinishRelease.outputs.tagName }}
