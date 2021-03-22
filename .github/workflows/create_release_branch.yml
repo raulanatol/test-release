@@ -25,7 +25,7 @@ jobs:
         run: npm install
       - name: Finish release
         id: FinishRelease
-        run: ./.scripts/finish-release.sh "${{ github.event.inputs.version_update }}"
+        run: ./finish-release.sh "${{ github.event.inputs.version_update }}"
         env:
           NODE_AUTH_TOKEN: ${{secrets.GITHUB_TOKEN}}
       - name: Test output
