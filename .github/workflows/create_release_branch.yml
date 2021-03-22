@@ -22,7 +22,7 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-node-
       - name: Install dependencies
-        run: make init
+        run: npm install
       - name: Finish release
         id: FinishRelease
         run: ./.scripts/finish-release.sh "${{ github.event.inputs.version_update }}"
